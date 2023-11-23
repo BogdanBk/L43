@@ -1,0 +1,101 @@
+using System;
+using System.Collections.Generic;
+
+// Інтерфейс для транспортних засобів
+public interface IDriveable
+{
+    void Move();
+    void Stop();
+}
+
+// Клас Транспортний засіб
+public class Vehicle : IDriveable
+{
+    public string Type { get; set; }
+    public int Speed { get; set; }
+    public int Size { get; set; }
+
+    public Vehicle(string type, int speed, int size)
+    {
+        Type = type;
+        Speed = speed;
+        Size = size;
+    }
+
+    public void Move()
+    {
+        Console.WriteLine($"{Type} is moving at a speed of {Speed} km/h.");
+    }
+
+    public void Stop()
+    {
+        Console.WriteLine($"{Type} has stopped.");
+    }
+}
+
+// Клас Дорога
+public class Road
+{
+    public double Length { get; set; }
+    public double Width { get; set; }
+    public int Lanes { get; set; }
+    public int TrafficLevel { get; set; }
+
+    public Road(double length, double width, int lanes)
+    {
+        Length = length;
+        Width = width;
+        Lanes = lanes;
+        TrafficLevel = 0;
+    }
+}
+
+// Клас імітації руху та зміни руху транспортних засобів
+public class TrafficSimulation
+{
+    private List<Vehicle> vehicles;
+    private Road road;
+
+    public TrafficSimulation(Road road)
+    {
+        vehicles = new List<Vehicle>();
+        this.road = road;
+    }
+
+    public void AddVehicle(Vehicle vehicle)
+    {
+        vehicles.Add(vehicle);
+    }
+
+    public void SimulateTraffic()
+    {
+        foreach (var vehicle in vehicles)
+        {
+            if (vehicle.Size <= road.Width / road.Lanes)
+            {
+                vehicle.Move();
+            }
+            else
+            {
+                Console.WriteLine($"{vehicle.Type} cannot move on this road due to its size.");
+            }
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        // Приклад використання
+        Road cityRoad = new Road(10, 4, 2);
+        Vehicle car = new Vehicle("Car", 60, 1);
+        Vehicle truck = new Vehicle("Truck", 40, 2);
+
+        TrafficSimulation simulation = new TrafficSimulation(cityRoad);
+        simulation.AddVehicle(car);
+        simulation.AddVehicle(truck);
+
+        simulation.SimulateTraffic();
+    }
+}
